@@ -1,0 +1,26 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="16" fill="#1a1a2e"/>
+  
+  <!-- Main brick -->
+  <rect x="6" y="14" width="20" height="10" rx="1" fill="#e74c3c" stroke="#c0392b" stroke-width="0.5"/>
+  
+  <!-- Studs on main brick -->
+  <circle cx="10" cy="14" r="2.5" fill="#c0392b"/>
+  <circle cx="16" cy="14" r="2.5" fill="#c0392b"/>
+  <circle cx="22" cy="14" r="2.5" fill="#c0392b"/>
+  
+  <!-- Stud highlights -->
+  <circle cx="10" cy="14" r="1.8" fill="#e74c3c"/>
+  <circle cx="16" cy="14" r="1.8" fill="#e74c3c"/>
+  <circle cx="22" cy="14" r="1.8" fill="#e74c3c"/>
+  
+  <!-- Top brick (blue) -->
+  <rect x="10" y="8" width="12" height="6" rx="0.5" fill="#3498db" stroke="#2980b9" stroke-width="0.5"/>
+  
+  <!-- Studs on top brick -->
+  <circle cx="13" cy="8" r="1.5" fill="#2980b9"/>
+  <circle cx="19" cy="8" r="1.5" fill="#2980b9"/>
+  <circle cx="13" cy="8" r="1" fill="#3498db"/>
+  <circle cx="19" cy="8" r="1" fill="#3498db"/>
+</svg>

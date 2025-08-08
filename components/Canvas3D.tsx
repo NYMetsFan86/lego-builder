@@ -47,12 +47,20 @@ function Scene() {
           const brickId = (hit.object as any).userData.brickId;
           const targetBrick = bricks.find(b => b.id === brickId);
           if (targetBrick) {
-            const yLayer = targetBrick.pos.y + (targetBrick.size.kind === "brick" ? 3 : 1);
+            // Use heightUnits to get proper height for stacking
+            const { heightUnits } = require("@/lib/lego/bricks");
+            const targetHeight = heightUnits(targetBrick.size.kind, targetBrick.size.h);
+            const yLayer = targetBrick.pos.y + targetHeight;
             const [sx, sz] = snapXZ(hit.point.x, hit.point.z, selectedSize, rotation, baseplate);
             
             // Check if we can place here
             const { occupied } = useBuilderStore.getState();
             const isValidPlacement = checkCanPlace(occupied, sx, yLayer, sz, selectedSize, rotation);
+            
+            // Debug logging
+            if (!isValidPlacement) {
+              console.log('Cannot place at:', sx, yLayer, sz, 'Target height:', targetHeight, 'Occupied keys:', Array.from(occupied));
+            }
             
             setGhost({ x: sx, y: yLayer, z: sz });
             setCanPlaceHere(isValidPlacement);
@@ -71,6 +79,11 @@ function Scene() {
             // Check if we can place here
             const { occupied } = useBuilderStore.getState();
             const isValidPlacement = checkCanPlace(occupied, sx, 0, sz, selectedSize, rotation);
+            
+            // Debug logging
+            if (!isValidPlacement) {
+              console.log('Cannot place on baseplate at:', sx, 0, sz, 'Occupied keys:', Array.from(occupied));
+            }
             
             setGhost({ x: sx, y: 0, z: sz });
             setCanPlaceHere(isValidPlacement);
@@ -99,7 +112,7 @@ function Scene() {
       if (e.button === 0 && ghost && canPlaceHere) { // Left click
         console.log('Placing brick at:', ghost);
         const success = placeBrick({ x: ghost.x, y: ghost.y, z: ghost.z });
-        console.log('Placement success:', success);
+        console.log('Placement success:', success, 'at position:', ghost);
         if (success) {
           // Visual feedback could go here
         }
@@ -168,16 +181,8 @@ function Scene() {
         <Baseplate size={baseplate} />
       </group>
       
-      {/* Debug brick - remove this after testing */}
-      {bricks.length === 0 && (
-        <mesh position={[0, 2, 0]} castShadow>
-          <boxGeometry args={[2, 3, 4]} />
-          <meshStandardMaterial color="#e74c3c" />
-        </mesh>
-      )}
       
       {/* Placed bricks */}
-      {console.log('Rendering bricks:', bricks.length, bricks)}
       {bricks.map(b => (
         <BrickMesh
           key={b.id}
@@ -206,10 +211,25 @@ function Scene() {
           {/* Debug position indicator */}
           <mesh position={ghostWorldPos}>
             <sphereGeometry args={[0.1]} />
-            <meshBasicMaterial color="yellow" />
+            <meshBasicMaterial color={canPlaceHere ? "green" : "red"} />
           </mesh>
         </>
       )}
+      
+      {/* Debug: Show occupied cells */}
+      {bricks.length < 10 && bricks.map(brick => {
+        const { footprintCells } = require("@/lib/lego/occupancy");
+        const cells = footprintCells(brick.pos.x, brick.pos.y, brick.pos.z, brick.size, brick.rotation);
+        return cells.cells.map((cell, i) => (
+          <mesh 
+            key={`debug-${brick.id}-${i}`}
+            position={[cell[0], cell[1] * 0.4 + 0.05, cell[2]]}
+          >
+            <boxGeometry args={[0.9, 0.1, 0.9]} />
+            <meshBasicMaterial color="red" opacity={0.3} transparent />
+          </mesh>
+        ));
+      })}
       
       <OrbitControls 
         makeDefault 
@@ -244,7 +264,7 @@ export default function Canvas3D() {
   return (
     <Canvas 
       shadows 
-      camera={{ position: [15, 18, 20], fov: 45 }}
+      camera={{ position: [20, 15, 25], fov: 45 }}
       style={{ background: '#1a1a2e' }}
     >
       <fog attach="fog" args={['#1a1a2e', 50, 200]} />

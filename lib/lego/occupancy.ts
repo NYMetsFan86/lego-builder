@@ -10,12 +10,19 @@ export function footprintCells(x:number, y:number, z:number, size:BrickSize, rot
   const rot = ((rotation % 360) + 360) % 360;
   const w = (rot === 90 || rot === 270) ? size.l : size.w;
   const l = (rot === 90 || rot === 270) ? size.w : size.l;
+  const h = heightUnits(size.kind, size.h);
+  
   const cells: [number, number, number][] = [];
-  for (let dx = 0; dx < w; dx++) {
-    for (let dz = 0; dz < l; dz++) {
-      cells.push([x + dx, y, z + dz]);
+  
+  // Occupy all layers based on piece height
+  for (let dy = 0; dy < h; dy++) {
+    for (let dx = 0; dx < w; dx++) {
+      for (let dz = 0; dz < l; dz++) {
+        cells.push([x + dx, y + dy, z + dz]);
+      }
     }
   }
+  
   return { cells };
 }
 
@@ -37,8 +44,9 @@ export function vacate(occupied:Set<CellKey>, x:number, y:number, z:number, size
 
 // world Y from plate layer
 export function worldYFor(layer:number, size:BrickSize) {
-  const h = heightUnits(size.kind);
-  // layer is in plate units, so we multiply by PLATE height (1)
-  // then add half the brick's height for center positioning
-  return layer * 1 + h * 0.5;
+  const { PLATE } = require("./units");
+  const h = heightUnits(size.kind, size.h);
+  // layer is in plate units, h is also in plate units
+  // Convert to world units and add half height for center
+  return layer * PLATE + (h * PLATE * 0.5);
 }

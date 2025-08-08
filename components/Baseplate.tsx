@@ -22,7 +22,7 @@ export default memo(function Baseplate({ size="medium", ...props }: MeshProps & 
           <bufferGeometry attach="geometry">
             <bufferAttribute
               attach="attributes-position"
-              args={[new Float32Array([ -half, 0.001, p, half, 0.001, p ]), 3]}
+              args={[new Float32Array([ -half, 0.01, p, half, 0.01, p ]), 3]}
             />
           </bufferGeometry>
           <lineBasicMaterial attach="material" color="#1a1a2e" opacity={0.3} transparent />
@@ -33,7 +33,7 @@ export default memo(function Baseplate({ size="medium", ...props }: MeshProps & 
           <bufferGeometry attach="geometry">
             <bufferAttribute
               attach="attributes-position"
-              args={[new Float32Array([ p, 0.001, -half, p, 0.001, half ]), 3]}
+              args={[new Float32Array([ p, 0.01, -half, p, 0.01, half ]), 3]}
             />
           </bufferGeometry>
           <lineBasicMaterial attach="material" color="#1a1a2e" opacity={0.3} transparent />

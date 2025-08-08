@@ -37,7 +37,7 @@ type BuilderStore = {
   loadScene: (s: SceneState) => void;
 };
 
-const defaultSize = BRICK_LIBRARY[3]; // 2x3 brick
+const defaultSize = BRICK_LIBRARY.find(b => b.name === "2×4 Brick") || BRICK_LIBRARY[3]; // 2x4 brick
 
 const initOccupied = (bricks: PlacedBrick[]) => {
   const set = new Set<CellKey>();
