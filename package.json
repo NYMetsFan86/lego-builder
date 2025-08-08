@@ -1,0 +1,26 @@
+{
+  "name": "lego-builder",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "echo \"skip\""
+  },
+  "dependencies": {
+    "@react-three/drei": "^9.121.3",
+    "@react-three/fiber": "^8.17.10",
+    "nanoid": "^5.0.7",
+    "next": "14.2.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "three": "^0.159.0",
+    "zustand": "^4.5.2"
+  },
+  "packageManager": "pnpm@10.14.0+sha512.ad27a79641b49c3e481a16a805baa71817a04bbe06a38d17e60e2eaee83f6a146c6a688125f5792e48dd5ba30e7da52a5cda4c3992b9ccf333f9ce223af84748",
+  "devDependencies": {
+    "@types/node": "24.2.0",
+    "typescript": "5.9.2"
+  }
+}
